@@ -12,7 +12,6 @@ pub fn build(b: *std.Build) void {
                 .{
                     .target = target,
                     .optimize = optimize,
-                    .link_libc = true,
                     .link_libcpp = true,
                 },
             ),
@@ -77,14 +76,15 @@ pub fn build(b: *std.Build) void {
         },
     });
 
-    const translate_header = b.addTranslateC(.{
+    var translate_header = b.addTranslateC(.{
         .link_libc = true,
         .root_source_file = b.path("Pluto/src/lua.h"),
         .target = target,
         .optimize = optimize,
     });
-
-    lib.root_module.addImport("pluto", translate_header.createModule());
+    translate_header.defineCMacro("noexcept", "");
+    const t_mod = translate_header.addModule("pluto");
+    t_mod.linkLibrary(lib);
 
     b.installArtifact(lib);
 }
