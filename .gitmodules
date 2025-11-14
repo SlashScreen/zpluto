@@ -1,0 +1,3 @@
+[submodule "Pluto"]
+	path = Pluto
+	url = git@github.com:PlutoLang/Pluto.git
