@@ -4,6 +4,8 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
+    const pluto_dep = b.dependency("pluto_lang", .{});
+
     const lib = b.addLibrary(
         .{
             .name = "zpluto",
@@ -19,7 +21,7 @@ pub fn build(b: *std.Build) void {
     );
 
     lib.addCSourceFiles(.{
-        .root = b.path("Pluto/src"),
+        .root = pluto_dep.path("src"),
         .files = &.{
             "lapi.cpp",
             "lassertlib.cpp",
@@ -78,7 +80,7 @@ pub fn build(b: *std.Build) void {
 
     var translate_header = b.addTranslateC(.{
         .link_libc = true,
-        .root_source_file = b.path("Pluto/src/lua.h"),
+        .root_source_file = pluto_dep.path("src/lua.h"),
         .target = target,
         .optimize = optimize,
     });
